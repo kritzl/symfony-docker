@@ -22,7 +22,11 @@ log {
 	}
 }
 
-route {
+@match {
+	path_regexp Foo ^\/(api|bundles|_wdt|_profiler|.well-known).*
+}
+
+route @match {
 	root * /app/public
 	mercure {
 		# Transport to use (default to Bolt)
@@ -62,4 +66,8 @@ route {
 	file_server
 
 	respond 404
+}
+
+route {
+    reverse_proxy node:3000
 }

@@ -30,6 +30,9 @@ RUN set -eux; \
         intl \
         opcache \
         zip \
+        pdo \
+        pdo_pgsql \
+        pgsql \
     ;
 
 ###> recipes ###
@@ -93,3 +96,27 @@ RUN set -eux; \
     composer dump-env prod; \
     composer run-script --no-dev post-install-cmd; \
     chmod +x bin/console; sync;
+
+FROM node:18.15 AS app_node
+
+RUN mkdir -p /app
+WORKDIR /app
+
+# PREPARE STARTUP SKRIPT
+COPY --link docker/node/start.prod.sh /usr/local/bin/start.sh
+RUN chmod 774 /usr/local/bin/start.sh
+
+CMD ["sh", "/usr/local/bin/start.sh"]
+
+FROM node:18.15 AS app_node_dev
+
+RUN mkdir -p /app
+WORKDIR /app
+
+# PREPARE STARTUP SKRIPT
+COPY --link docker/node/start.sh /usr/local/bin/start.sh
+RUN chmod 774 /usr/local/bin/start.sh
+
+EXPOSE 3000
+
+CMD ["sh", "/usr/local/bin/start.sh"]

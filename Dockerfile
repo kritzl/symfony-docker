@@ -93,7 +93,7 @@ RUN set -eux; \
 	composer run-script --no-dev post-install-cmd; \
 	chmod +x bin/console; sync;
 
-FROM node:18.15 AS app_node
+FROM node:21 AS app_node
 
 RUN mkdir -p /app
 WORKDIR /app
@@ -104,7 +104,7 @@ RUN chmod 774 /usr/local/bin/start.sh
 
 CMD ["sh", "/usr/local/bin/start.sh"]
 
-FROM node:18.15 AS app_node_dev
+FROM node:21 AS app_node_dev
 
 RUN mkdir -p /app
 WORKDIR /app

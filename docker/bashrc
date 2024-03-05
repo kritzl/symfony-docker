@@ -1,0 +1,11 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+export PS1='\h:\w\$ '
+umask 022
+
+alias ll='ls $LS_OPTIONS -lahp'
+
+# Avoid making mistakes:
+alias rm='rm -i'
+alias mv='mv -i'
+alias cp='cp -i'
+

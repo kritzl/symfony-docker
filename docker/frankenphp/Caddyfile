@@ -26,6 +26,11 @@
 		}
 	}
 
+@match {
+	path_regexp Foo ^\/(api|bundles|_wdt|_profiler|.well-known).*
+}
+
+route @match {
 	root * /app/public
 	encode zstd br gzip
 
@@ -52,4 +57,8 @@
 	header ?Permissions-Policy "browsing-topics=()"
 
 	php_server
+}
+
+route {
+    reverse_proxy node:3000
 }

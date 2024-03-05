@@ -1,13 +1,32 @@
 # Development environment override
 services:
+  node:
+    build:
+      target: app_node_dev
+    ports:
+      - 24678:24678
+    networks:
+      - app
+    restart: unless-stopped
+    volumes:
+      - ./app:/app
+
+  pgsql:
+    volumes:
+      - ./db/dumps:/opt/dumps
+      - ./db/backups:/opt/backups
+    ports:
+      - "5432:5432"
+    command: [ "postgres", "-c", "log_statement=all" ]
+    
   php:
     build:
       context: .
       target: frankenphp_dev
     volumes:
-      - ./:/app
-      - ./frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro
-      - ./frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
+      - ./api:/app
+      - ./docker/frankenphp/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./docker/frankenphp/conf.d/app.dev.ini:/usr/local/etc/php/conf.d/app.dev.ini:ro
       # If you develop on Mac or Windows you can remove the vendor/ directory
       #  from the bind-mount for better performance by enabling the next line:
       #- /app/vendor
